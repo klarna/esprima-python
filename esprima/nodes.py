@@ -27,6 +27,9 @@ from .objects import Object
 from .syntax import Syntax
 from .scanner import RegExp
 
+from copy import copy, deepcopy
+import sys
+
 
 class Node(Object):
     def __dir__(self):
@@ -40,6 +43,20 @@ class Node(Object):
 
     def items(self):
         return self.__dict__.items()
+
+    def __deepcopy__(self, memo=None, _nil=[]):
+        if memo is None:
+            memo = {}
+        id_self = id(self)
+        _copy = memo.get(id_self, _nil)
+        if _copy is not _nil:
+            return _copy
+        dict = Node()
+        memo[id_self] = id(dict)
+
+        for key in self.keys():
+            dict.__setattr__(deepcopy(key, memo), deepcopy(getattr(self, key), memo))
+        return dict
 
 
 class ArrayExpression(Node):
@@ -505,15 +522,16 @@ class TaggedTemplateExpression(Node):
         self.quasi = quasi
 
 
-class TemplateElement(Node):
-    class Value(Object):
-        def __init__(self, raw, cooked):
-            self.raw = raw
-            self.cooked = cooked
+class TemplateValue(Node):
+    def __init__(self, raw, cooked):
+        self.raw = raw
+        self.cooked = cooked
 
+
+class TemplateElement(Node):
     def __init__(self, raw, cooked, tail):
         self.type = Syntax.TemplateElement
-        self.value = TemplateElement.Value(raw, cooked)
+        self.value = TemplateValue(raw, cooked)
         self.tail = tail
 
 

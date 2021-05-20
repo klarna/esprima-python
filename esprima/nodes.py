@@ -452,7 +452,7 @@ class RegexLiteral(Node):
         self.value = value
         self.raw = raw
         self.regex = RegExp(
-            pattern=pattern, 
+            pattern=pattern,
             flags=flags,
         )
 

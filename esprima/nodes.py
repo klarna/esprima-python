@@ -412,7 +412,7 @@ class FieldDefinition(Node):
 class Module(Node):
     def __init__(self, body):
         self.type = Syntax.Program
-        self.sourceType = "module"
+        self.sourceType = 'module'
         self.body = body
 
 
@@ -451,7 +451,10 @@ class RegexLiteral(Node):
         self.type = Syntax.Literal
         self.value = value
         self.raw = raw
-        self.regex = RegExp(pattern=pattern, flags=flags,)
+        self.regex = RegExp(
+            pattern=pattern, 
+            flags=flags,
+        )
 
 
 class RestElement(Node):
@@ -469,7 +472,7 @@ class ReturnStatement(Node):
 class Script(Node):
     def __init__(self, body):
         self.type = Syntax.Program
-        self.sourceType = "script"
+        self.sourceType = 'script'
         self.body = body
 
 
